@@ -1,0 +1,57 @@
+We can use sprintf  similar to C language to format the report.
+
+example:   $formatted_string = sprintf("%80s %25s", ....
+# open up for reading the option_ool_rpt_file_yyyyddmm.txt
+# open up for writing /tmp/option_ool_email_rpt_timestamp.txt"
+# while reading option_ool_rpt_file_yyyyddmm.txt
+# format and write to /tmp/option_ool_email_rpt_timestamp.txt
+# end while
+# formated_content - formatted this file $option_ool_rpt_file
+{{ Et_Run_Log("sendMailFile $subject, $email_list, $content,$mhost ");}}
+{{ &sendMailFile( $subject, $email_list, $content,$mhost );}}
+
+
+#Send or update mails - PBS-2593
+64, 65, 66 lines
+
+
+I think this ticket is a requirement in reference to the job account_ets_option_pair_rpt (pbs-2595 as noted below from Anne's comment on 20/Feb/19.
+
+The email content include content from this file with format as shown
+/etrade/[env]/etsec/batch/backoffice/incoming/option_ool_rpt_file_yyyyddmm.dat
+
+Here is a preliminary design of the email report. 
+We will need  to check with Ronald/Michael to confirm the email layout.
+And we just proceed code development with this tentative design.
+
+ 
+
+from config file:
+
+OOL_REPORT_PRD = #AccountBatchJobNotification@etrade.com, Gervolino.Ronald@etrade.com
+OOL_REPORT_SIT = your email, hemaletha.s@etrade.com, charles.ho2@etrade.com
+OOL_REPORT_UAT = your email, hemaletha.s@etrade.com, charles.ho2@etrade.com
+
+ 
+
+Acceptance Criteria: The email recipient specified in the config file should receive an email with content as shown.
+
+Sample content:
+=======================================
+
+List of  Option Out-Of-Level Accounts:
+
+Account-Id      Option                                 Out-Of-Level Day Cnt         Out-Of_Level Date   
+
+32998352.     STAY Oct 15 '21 $25 Call         1                                        07-12-2021
+37394732.     STAY Jan 20 '23 $19.65 Call   1                                         07-12-2021
+38159710.     MO Sep 17 '21 $47.50 Call        1                                         07-12-2021
+42098137.     STAY Jan 20 '23 $19.65 Call    1                                        07-12-2021
+53295370.     PENN Jul 23 '21 $74 Call|        1                                         07-12-2021
+54232469.    MSGE Aug 20 '21 $12.50 Call.  1                                         07-12-2021
+54293225.    MO Jan 21 '22 $50 Call            1                                         07-12-2021
+54293225.    RIG Jan 20 '23 $7 Call             1                                          07-12-2021
+
+Total Account: 8
+=========================================
+Subject:  [PRD] or [SIT|UAT].  account_ets_option_pair_rpt [succeeded or failed]
